@@ -4,6 +4,8 @@ import './App.css'
 import HomePage from './pages/HomePage'
 import MangasPage from './pages/MangasPage'
 import NavbarComponent from './components/NavbarComponent'
+import SignIn from './pages/SignIn'
+import LoginPage from './pages/LoginPage'
 
 function App() {
 
@@ -14,6 +16,8 @@ function App() {
       <Routes>
         <Route path='/' element={<HomePage />} />
         <Route path='/mangas' element={<MangasPage />} />
+        <Route path='/signin' element={<SignIn />} />
+        <Route path='/login' element={<LoginPage />} />
 
       </Routes>
 
