@@ -9,7 +9,7 @@ export type MangasType = {
     numero_chapitre: number;
 };
 
-const MangasComponent: React.FC<MangasType & { reloadMangasList: () => void }> = ({ id_box, titre, lien, lien_image, numero_chapitre, reloadMangasList }) => {
+const MangasComponent: React.FC<MangasType & { reloadMangasList: () => void, setNotification: (value: React.SetStateAction<string[]>) => void }> = ({ id_box, titre, lien, lien_image, numero_chapitre, reloadMangasList, setNotification }) => {
 
     const handleDelete = async () => {
         console.log(id_box);
@@ -26,6 +26,7 @@ const MangasComponent: React.FC<MangasType & { reloadMangasList: () => void }> =
                     })
                 })
                 reloadMangasList();
+                setNotification((curr) => [...curr, 'supprimé !'])
             } catch (error) {
                 console.error(error);
             }
@@ -46,6 +47,7 @@ const MangasComponent: React.FC<MangasType & { reloadMangasList: () => void }> =
                         new_numero_chapitre: parseInt(input.value),
                     })
                 })
+                setNotification((curr) => [...curr, 'mis à jour !'])
                 
             }catch(error){
                 console.error(error);

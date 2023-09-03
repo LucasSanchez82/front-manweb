@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import MangasComponent, { MangasType } from "../components/MangasComponent";
-import { useApiError, useApiMessage } from '../hooks/useApiErrorAndMessage';
+import { useApiError } from '../hooks/useApiErrorAndMessage';
 type formDataObjectType = {
     titre: FormDataEntryValue | null;
     lien: FormDataEntryValue | null;
@@ -11,7 +11,7 @@ type formDataObjectType = {
 const MangasPage = () => {
     const [mangasList, setMangasList] = useState<MangasType[]>([]);
     const {error, setError} = useApiError();
-    const {message, setMessage} = useApiMessage();
+    const [notification, setNotification] = useState<string[]>([]);
 
     useEffect(() => {
         loadMangasOfApi(); // Call your function here
@@ -110,10 +110,10 @@ const MangasPage = () => {
                 setError(data.error);
 
             } else if (response.ok) {
-                setMessage(data.message)
                 reloadMangasList();
 
             }
+            setNotification((curr) => [...curr, 'ajouté avec succès !']);
         } catch (error) {
             console.error(error);
             setError('Erreur de communication avec le serveur')
@@ -124,6 +124,17 @@ const MangasPage = () => {
 
     return (
         <>
+            {
+                notification.length > 0 && (
+                    <div className="notification">
+                        {
+                            notification.map((message, index) => {
+                                return <p key={index}>{message}</p>
+                            })
+                        }
+                    </div>
+                )
+            }
             <form onSubmit={handleSubmit}>
                 <input type="text" placeholder="titre..." name="titre" />
                 <input type="text" placeholder="lien..." name="lien" />
@@ -132,7 +143,6 @@ const MangasPage = () => {
                 <input type="submit" defaultValue="Submit" />
             </form>
             {error && <p id="error"> {error} </p>}
-            {message && <p id="error"> {message} </p>}
             <div id='container'>
                 {
                     mangasList.map((manga, key) => (
@@ -140,6 +150,7 @@ const MangasPage = () => {
                             {...manga}
                             key={key}
                             reloadMangasList={reloadMangasList}
+                            setNotification={setNotification}
                         />
                     ))
                 }

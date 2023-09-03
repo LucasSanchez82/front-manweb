@@ -26,6 +26,22 @@ form {
   align-items: center;
 }
 
+.notification {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+
+.notification>p {
+  font-size: 1.3rem;
+  background-color: #9fdfa2;
+  border-radius: 7px;
+  margin: 5px;
+  padding: 5px;
+  -webkit-animation: slide-out-top 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) 2s both;
+  animation: slide-out-top 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) 2s both;
+}
+
 #navbar>ul {
   display: flex;
   justify-content: space-around;
@@ -46,15 +62,15 @@ form {
   background-color: #676c9b;
 }
 
-#navbar>ul>li>button{
-    padding: 7px;
-    height: 100%;
-    background: dodgerblue;
-    border-radius: 6px;
-    transition: all .3s cubic-bezier(0.67, 0.17, 0.40, 0.83);
-      color: white;
-    font-size: 2em;
-    transition: all .9s;
+#navbar>ul>li>button {
+  padding: 7px;
+  height: 100%;
+  background: dodgerblue;
+  border-radius: 6px;
+  transition: all .3s cubic-bezier(0.67, 0.17, 0.40, 0.83);
+  color: white;
+  font-size: 2em;
+  transition: all .9s;
 }
 
 #container {
@@ -149,7 +165,8 @@ img {
   border-radius: 5px;
 }
 
-.itemMangaContainer:hover, #navbar > ul > li:hover {
+.itemMangaContainer:hover,
+#navbar>ul>li:hover {
   -webkit-animation: buttonAnimation 0.8s ease-in-out both;
   animation: buttonAnimation 0.8s ease-in-out both;
 }
@@ -316,5 +333,34 @@ input {
     -webkit-transform-origin: 50% 50%;
     transform-origin: 50% 50%;
     text-shadow: 0 1px 0 #cccccc, 0 2px 0 #cccccc, 0 3px 0 #cccccc, 0 4px 0 #cccccc, 0 5px 0 #cccccc, 0 6px 0 #cccccc, 0 7px 0 #cccccc, 0 8px 0 #cccccc, 0 9px 0 #cccccc, 0 50px 30px rgba(0, 0, 0, 0.3);
+  }
+}
+
+@-webkit-keyframes slide-out-top {
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  100% {
+    -webkit-transform: translateY(-1000px);
+    transform: translateY(-1000px);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-out-top {
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  100% {
+    -webkit-transform: translateY(-1000px);
+    transform: translateY(-1000px);
+    opacity: 0;
+    display: none;
   }
 }
