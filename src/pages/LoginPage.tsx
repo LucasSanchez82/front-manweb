@@ -1,15 +1,17 @@
 import { useState } from "react";
+import { useApiError } from "../hooks/useApiErrorAndMessage";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
     const [message, setMessage] = useState('')
-    const [error, setError] = useState('')
+    const {error, setError} = useApiError()
+    const navigate = useNavigate();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const form = event.target;
         if (!(form instanceof HTMLFormElement)) throw Error('form n\'est pas de type HTMLFormElement');
         const formData = Object.fromEntries(new FormData(form));
-        console.log(formData);
 
         if (!(formData.email && formData.mdp)) throw Error('formdData n\'est pas complet (email & mdp)');
         await logInApi(formData);
@@ -33,15 +35,14 @@ const LoginPage = () => {
                 setError(data.error);
                 
             } else if (response.ok) {
-                const json = await response.json()
+                const json = await response.json();
                 setMessage(json.message);
-                
+                navigate('/');
             }
         } catch (error) {
             setError('Une erreur s\'est produite lors de la communication avec le serveur.');
             console.error(error);
         }
-        // console.log(await response.json());
 
 
     }

@@ -1,71 +1,320 @@
-
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+* {
   margin: 0;
-  display: flex;
-  /* place-items: center; */
-  min-width: 320px;
-  min-height: 100vh;
-
+  padding: 0;
+  box-sizing: border-box;
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  margin-top: 50px;
+  width: 100%;
+  font-size: 4rem;
+  text-align: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  -webkit-animation: text-pop-up-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  animation: text-pop-up-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+body {
+  padding: 15px;
+  background-color: rgb(78, 82, 117);
+}
+
+form {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+#navbar>ul {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+#navbar>ul>li {
+  list-style: none;
+}
+
+#navbar>ul>li>a {
+  border-radius: 7px;
+  padding: 3px;
+  text-decoration: none;
+  color: #99a1e7;
+  font-size: 1.5rem;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background-color: #676c9b;
+}
+
+#navbar>ul>li>button{
+    padding: 7px;
+    height: 100%;
+    background: dodgerblue;
+    border-radius: 6px;
+    transition: all .3s cubic-bezier(0.67, 0.17, 0.40, 0.83);
+      color: white;
+    font-size: 2em;
+    transition: all .9s;
+}
+
+#container {
+  width: 100ù;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+.itemMangaContainer>svg {
+  height: 25px;
+  width: 25px;
+}
+
+.itemMangaContainer,
+.itemMangaContainer>a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  flex-direction: column;
+}
+
+.new-itemMangaContainer {
+  order: 0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.chapter {
+  max-width: 50px;
+  margin: 10px 0;
+  padding: 5px;
+  text-align: center;
+  color: aliceblue;
+  background-color: rgb(78, 82, 117);
+  border: none;
+  border-radius: 10px;
+  position: relative;
+  bottom: 0px;
+}
+
+.delete {
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  color: aliceblue;
+  align-self: flex-end;
+  font-style: italic;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+.itemMangaContainer {
+  order: 5;
+  /* height: 187px; */
+  width: calc(25% - 3 * 2px);
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 15px;
+  padding: 10px;
+  margin: 3px;
+  background-color: rgb(33, 31, 54);
+  font-size: 12px;
+  overflow: hidden;
+}
+
+.mangaImage {
+  width: 130px;
+  height: 55px;
+  margin-top: 10px;
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: top;
+  background-size: 130px auto;
+}
+
+a {
+  color: aliceblue;
+  width: 100%;
+  text-align: center;
+}
+
+a:visited {
+  color: cadetblue;
+}
+
+img {
+  max-width: 130px;
+  margin-top: 15px;
+  height: 100%;
+  border-radius: 5px;
+}
+
+.itemMangaContainer:hover, #navbar > ul > li:hover {
+  -webkit-animation: buttonAnimation 0.8s ease-in-out both;
+  animation: buttonAnimation 0.8s ease-in-out both;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+textarea {
+  border-radius: 5px;
+  margin: 10px;
+  width: 70vw;
+}
+
+#area-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#btn-true {
+  background-color: rgb(206, 243, 199);
+}
+
+#btn-false {
+  background-color: rgb(209, 162, 162);
+}
+
+#otherSaves {
+  display: flex;
+  flex-direction: column;
+}
+
+#otherSaves span {
+  margin: 5px;
+  padding: 2px 2px 2px 16px;
+  border-radius: 4px;
+  background-color: rgb(98, 101, 136);
+  font-size: 17px;
+}
+
+#myInput {
+
+  width: calc(100% - 100px);
+  /* Full-width */
+  margin: 10px;
+  text-align: center;
+  font-size: 16px;
+  /* Increase font-size */
+  padding: 12px 20px 12px 40px;
+  /* Add some padding */
+  border: 1px solid #ddd;
+  /* Add a grey border */
+  border-radius: 50px;
+  /* margin-bottom: 12px; Add some space below the input */
+}
+
+input {
+  cursor: pointer;
+  padding: 5px;
+  height: 30px;
+  margin: 5px;
+  text-align: center;
+  border-radius: 5px;
+
+}
+
+#pop-up-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.pop-up {
+  margin: 5px 15px;
+  text-align: center;
+  min-width: 200px;
+  min-height: 20px;
+  border-radius: 5px;
+  color: #ffffff;
+  background-color: rgb(83, 109, 223);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  animation: pop-up-animation 1.5s linear 0.5s infinite alternate;
+
+}
+
+#buttons-container input[type='button'] {
+  background-color: rgb(240, 240, 240);
+
+}
+
+#buttons-container {
+  display: flex;
+  flex-flow: row wrap;
+  margin: 25px 15% 25px 15%;
+  padding: 5px;
+  justify-content: space-around;
+  background-color: rgb(67, 67, 107);
+  border-radius: 5px;
+}
+
+@keyframes pop-up-animation {
+  from {
+    opacity: 1;
   }
-  a:hover {
-    color: #747bff;
+
+  to {
+    opacity: 0;
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+@keyframes buttonAnimation {
+  0% {
+    transform: scale(1);
+  }
+
+  30% {
+    transform: scale(0.98);
+  }
+
+  60% {
+    transform: scale(1.01);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media screen and (max-width: 837px) {
+  .itemMangaContainer {
+    width: calc(33% - 6px);
+  }
+}
+
+@media screen and (max-width: 538px) {
+  .itemMangaContainer {
+    width: calc(50% - 6px);
+  }
+}
+
+@media screen and (max-width: 388px) {
+  .itemMangaContainer {
+    width: 100%;
+  }
+}
+
+
+@keyframes text-pop-up-top {
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    text-shadow: none;
+  }
+
+  100% {
+    -webkit-transform: translateY(-50px);
+    transform: translateY(-50px);
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    text-shadow: 0 1px 0 #cccccc, 0 2px 0 #cccccc, 0 3px 0 #cccccc, 0 4px 0 #cccccc, 0 5px 0 #cccccc, 0 6px 0 #cccccc, 0 7px 0 #cccccc, 0 8px 0 #cccccc, 0 9px 0 #cccccc, 0 50px 30px rgba(0, 0, 0, 0.3);
   }
 }

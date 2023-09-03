@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import MangasComponent, { MangasType } from "../components/MangasComponent";
+import { useApiError, useApiMessage } from '../hooks/useApiErrorAndMessage';
 type formDataObjectType = {
     titre: FormDataEntryValue | null;
     lien: FormDataEntryValue | null;
@@ -9,14 +10,18 @@ type formDataObjectType = {
 
 const MangasPage = () => {
     const [mangasList, setMangasList] = useState<MangasType[]>([]);
-    const [error, setError] = useState('');
-    const [message, setMessage] = useState('');
+    const {error, setError} = useApiError();
+    const {message, setMessage} = useApiMessage();
 
     useEffect(() => {
-        whenLoaded(); // Call your function here
+        loadMangasOfApi(); // Call your function here
     }, []);
+    const reloadMangasList = () => {
+        loadMangasOfApi();
+    };
+    
 
-    const whenLoaded = async () => {
+    const loadMangasOfApi = async () => {
         try {
             const response = await fetch('http://localhost:3000/boxs', {
                 credentials: 'include',
@@ -29,13 +34,13 @@ const MangasPage = () => {
             const dataJson = await response.json();
             if (!response.ok) {
                 setError(dataJson.error)
-                console.log('--ca n a aps marche--');
                 
             } else if (response.ok) {
 
                 setMangasList(dataJson);
                 
             }
+            
         } catch (error) {
             console.error(error)
         }
@@ -91,7 +96,6 @@ const MangasPage = () => {
     };
 
     const createBoxApi = async (formData: formDataObjectType) => {
-        console.log(formData);
         try {
             const response = await fetch('http://localhost:3000/boxs/', {
                 credentials: 'include',
@@ -107,8 +111,7 @@ const MangasPage = () => {
 
             } else if (response.ok) {
                 setMessage(data.message)
-                console.log(data.item);
-                if (isMangasType(data.item)) setMangasList((curr) => [data.item, ...curr]);
+                reloadMangasList();
 
             }
         } catch (error) {
@@ -117,17 +120,6 @@ const MangasPage = () => {
         }
 
 
-    }
-
-
-    const isMangasType = (obj: any): obj is MangasType => {
-        return (
-            typeof obj === 'object' &&
-            'titre' in obj &&
-            'lien' in obj &&
-            'lien_image' in obj &&
-            'numero_chapitre' in obj
-        );
     }
 
     return (
@@ -139,14 +131,15 @@ const MangasPage = () => {
                 <input type="number" placeholder="numero chapitre..." name="numero_chapitre" />
                 <input type="submit" defaultValue="Submit" />
             </form>
-            {error && <span id="error"> {error} </span>}
-            {message && <span id="error"> {message} </span>}
-            <div id='mangasContainer'>
+            {error && <p id="error"> {error} </p>}
+            {message && <p id="error"> {message} </p>}
+            <div id='container'>
                 {
                     mangasList.map((manga, key) => (
                         <MangasComponent
                             {...manga}
                             key={key}
+                            reloadMangasList={reloadMangasList}
                         />
                     ))
                 }
@@ -156,134 +149,3 @@ const MangasPage = () => {
 };
 
 export default MangasPage;
-
-
-
-
-// import React, { useState } from 'react';
-// import MangasComponent, { MangasType } from "../components/MangasComponent";
-
-// const MangasPage = () => {
-//     const [mangasList, setMangasList] = useState<MangasType[]>([]);
-//     const [error, setError] = useState('');
-
-//     // const handleSubmit = (event: React.FormEvent) => {
-//     //     event.preventDefault();
-
-//     //     const form = event.currentTarget;
-//     //     if (!(form instanceof HTMLFormElement)) throw Error('Error, form is not an instance of HTMLFormElement');
-
-
-//     //     const formData = new FormData(form);
-//     //     const formDataObject = {
-//     //         title: formData.get('title'),
-//     //         link: formData.get('link'),
-//     //         linkImage: formData.get('linkImage'),
-//     //         chapter: formData.get('chapter'),
-//     //     }
-//     //     if(!(typeof formDataObject.title === 'string'
-//     //         && typeof formDataObject.link ==='string'
-//     //         && typeof formDataObject.linkImage ==='string'
-//     //         && typeof formDataObject.chapter ==='string')) throw Error('Les types recu par le formulaire ne sont pas bons')
-
-
-//     //     const mangas: MangasType = {
-//     //         title: formDataObject.title,
-//     //         link: formDataObject.link,
-//     //         linkImage: formDataObject.linkImage,
-//     //         chapter: parseInt(formDataObject.chapter),
-//     //     };
-
-
-//     //     // setMangasList([...mangasList, mangas]);
-//     //     setMangasList((curr) => ([...curr, mangas]));
-
-
-//     //     console.log(mangasList);
-//     // };
-
-//     const handleSubmit = (event: React.FormEvent) => {
-//         event.preventDefault();
-
-//         const form = event.currentTarget;
-//         if (!(form instanceof HTMLFormElement)) throw Error('Error, form is not an instance of HTMLFormElement');
-
-//         const formData = new FormData(form);
-//         const formDataObject = {
-//             title: formData.get('title'),
-//             link: formData.get('link'),
-//             linkImage: formData.get('linkImage'),
-//             chapter: formData.get('chapter'),
-//         }
-
-//         if (
-//             typeof formDataObject.title !== 'string' ||
-//             typeof formDataObject.link !== 'string' ||
-//             typeof formDataObject.linkImage !== 'string' ||
-//             typeof formDataObject.chapter !== 'string'
-//         ) {
-//             throw Error('Les types recu par le formulaire ne sont pas bons');
-//         }
-
-//         // Validate URLs
-//         const isValidLink = /^(http|https):\/\/[^ "]+$/.test(formDataObject.link);
-//         const isValidImageLink = /^(http|https):\/\/[^ "]+$/.test(formDataObject.linkImage);
-
-//         if (!isValidLink) {
-//             console.error('Invalid link URL');
-//             setError('Invalid link URL')
-//             return;
-//         } else setError('');
-
-//         if (!isValidImageLink) {
-//             console.error('Invalid image link URL');
-//             setError('Invalid image link URL')
-//             return;
-//         } else setError('');
-
-//         const mangas: MangasType = {
-//             title: formDataObject.title,
-//             link: formDataObject.link,
-//             linkImage: formDataObject.linkImage,
-//             chapter: parseInt(formDataObject.chapter),
-//         };
-
-//         setMangasList((curr) => ([...curr, mangas]));
-
-//         console.log(mangasList);
-//     };
-//     const handleMangaUpdate = (index: number, newChapter: number) => {
-//         setMangasList((prevList) => {
-//             const updatedList = [...prevList];
-//             updatedList[index] = { ...updatedList[index], chapter: newChapter };
-//             return updatedList;
-//         });
-//     };
-
-
-//     return (
-//         <>
-//             <form onSubmit={handleSubmit}>
-//                 <input type="text" placeholder="titre..." name="titre" />
-//                 <input type="text" placeholder="lien..." name="lien" />
-//                 <input type="text" placeholder="https://domaine.com/image.jpg..." name="lien_image" />
-//                 <input type="number" placeholder="numero chapitre..." name="numero_chapitre" />
-//                 <input type="submit" defaultValue="Submit" />
-//             </form>
-//             {error && <span id="error"> {error} </span>}
-//             <div id='mangasContainer'>
-//                 {
-//                     mangasList.map((manga, key) => (
-//                         <MangasComponent
-//                             {...manga}
-//                             key={key}
-//                             updateManga={(newChapter) => handleMangaUpdate(key, newChapter)}
-//                         />
-//                     ))
-//                 }
-//             </div>
-//         </>
-//     );
-// };
-
-// export default MangasPage;

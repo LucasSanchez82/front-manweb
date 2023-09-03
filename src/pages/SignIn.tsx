@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { useApiError } from '../hooks/useApiErrorAndMessage';
 
 const SignIn = () => {
-    const [error, setError] = useState('');
+    const {error, setError} = useApiError();
     const [responseMessage, setResponseMessage] = useState('');
 
     const signInApi = async (formData:{
@@ -86,72 +87,3 @@ const SignIn = () => {
 };
 
 export default SignIn;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React, { useState } from 'react';
-
-
-
-// const SignIn = () => {
-//     const [error, setError] = useState('');
-
-//     const handleSubmit = (event: React.FormEvent) => {
-//         event.preventDefault();
-//         const form = event.target;
-//         if(!(form instanceof HTMLFormElement)) throw Error('le formulaire n\'est pas une instance de HTMLFormElement')
-//         const formData = Object.fromEntries(new FormData(form));
-
-    
-    
-//         if(formData.password && formData.verifyPassword && formData.email && formData.pseudo){
-//             if(!(formData.verifyPassword === formData.password)) {
-//                 setError('les mots de passes doivent être identiques');
-//             }else if (formData.password === ''){
-//                 setError('Il doit y avoir un mot de passe');
-//             }else {
-//                 setError('');
-//                 const mdpForCreateUser = prompt('renseigne le mot de passe administrateur de creation de compte');
-//                 if(mdpForCreateUser) formData.mdpForCreateUser = mdpForCreateUser; else  setError('Pass admin ne doit pas etre vide'); throw Error('PassAdmon ne doit pas etre une chaine de caractere vide, ne doit pas être falsy')
-                
-//                 console.log(formData);
-//             };
-//         }else setError('veuilllez Remplir tous les champs du formulaire !') //alert('les donnees du formulaire recuperes dans formData ne sont pas correct: formdata = {email: string, password: string, verifyPassword: string, pseudo: string} ')
-    
-//     }
-
-    
-//     return (
-//         <div>
-//             <h1>Sign In</h1>
-//             <form method='POST' onSubmit={handleSubmit} >
-//                 <input type="text" name="email" placeholder='email@exemple.com' />
-//                 <input type="text" name="pseudo" placeholder='Pseudo...' />
-//                 <input type="password" name="password" placeholder='password...' />
-//                 <input type="password" name="verifyPassword" placeholder='verify password...' />
-//                 <input type="submit" value="submit" />
-//                 {error && <span> {error} </span>}
-//             </form>
-//         </div>
-//     );
-// };
-
-// export default SignIn;
