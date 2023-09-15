@@ -15,7 +15,7 @@ const MangasComponent: React.FC<MangasType & { reloadMangasList: () => void, set
         console.log(id_box);
         if (confirm('sur ?')) {
             try {
-                await fetch('http://localhost:3000/boxs/', {
+                await fetch(import.meta.env.VITE_REACT_API_URL + '/boxs/', {
                     credentials: 'include',
                     method: 'DELETE',
                     headers: {
@@ -36,7 +36,7 @@ const MangasComponent: React.FC<MangasType & { reloadMangasList: () => void, set
         const input = event.target
         if (input instanceof HTMLInputElement) {
             try {
-                await fetch('http://localhost:3000/boxs', {
+                await fetch(import.meta.env.VITE_REACT_API_URL + '/boxs', {
                     credentials: 'include',
                     method: 'PUT',
                     headers: {

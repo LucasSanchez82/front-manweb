@@ -23,7 +23,7 @@ const MangasPage = () => {
 
     const loadMangasOfApi = async () => {
         try {
-            const response = await fetch('http://localhost:3000/boxs', {
+            const response = await fetch(import.meta.env.VITE_REACT_API_URL + '/boxs', {
                 credentials: 'include',
                 method: 'GET',
                 headers: {
@@ -97,7 +97,7 @@ const MangasPage = () => {
 
     const createBoxApi = async (formData: formDataObjectType) => {
         try {
-            const response = await fetch('http://localhost:3000/boxs/', {
+            const response = await fetch(import.meta.env.VITE_REACT_API_URL + '/boxs/', {
                 credentials: 'include',
                 method: 'POST',
                 headers: {

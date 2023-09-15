@@ -9,7 +9,7 @@ const SignIn = () => {
         [k: string]: FormDataEntryValue;
     }) => {
         try {
-            const response = await fetch('http://localhost:3000/utilisateurs/signin', {
+            const response = await fetch(import.meta.env.VITE_REACT_API_URL + '/utilisateurs/signin', {
                 credentials: 'include',
                 method: 'POST',
                 headers: {
@@ -52,16 +52,7 @@ const SignIn = () => {
                 setError('Il doit y avoir un mot de passe');
             } else {
                 setError('');
-                const mdpForCreateUser = prompt('renseigne le mot de passe administrateur de creation de compte');
-                if (mdpForCreateUser) {
-                    formData.mdpForCreateUser = mdpForCreateUser;
-                } else {
-                    setError('Pass admin ne doit pas etre vide');
-                    throw Error(
-                        'mdpForCreateUser ne doit pas etre une chaine de caractere vide, ne doit pas être falsy'
-                    );
-                }
-
+                
                 // interrogation de la base de donnee
                 await signInApi(formData)
             }

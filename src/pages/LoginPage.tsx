@@ -1,14 +1,15 @@
-import { useState } from "react";
-import { useApiError } from "../hooks/useApiErrorAndMessage";
+import { useApiError, useApiMessage } from "../hooks/useApiErrorAndMessage";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
-    const [message, setMessage] = useState('')
-    const {error, setError} = useApiError()
+    const {message, setMessage} = useApiMessage();
+    const {error, setError} = useApiError();
     const navigate = useNavigate();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        console.log((import.meta.env.VITE_REACT_API_URL));
+        
         const form = event.target;
         if (!(form instanceof HTMLFormElement)) throw Error('form n\'est pas de type HTMLFormElement');
         const formData = Object.fromEntries(new FormData(form));
@@ -22,7 +23,8 @@ const LoginPage = () => {
         [k: string]: FormDataEntryValue;
     }) => {
         try {
-            const response = await fetch('http://localhost:3000/utilisateurs/login', {
+            
+            const response = await fetch( import.meta.env.VITE_REACT_API_URL + '/utilisateurs/login', {
                 credentials: "include",
                 method: "POST",
                 headers: {

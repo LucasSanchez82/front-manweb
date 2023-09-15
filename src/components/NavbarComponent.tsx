@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 const NavbarComponent = () => {
     const navigate =useNavigate();
     const handleLogout = async () => {
-        await fetch('http://localhost:3000/logout', {
+        await fetch(import.meta.env.VITE_REACT_API_URL + '/logout', {
             credentials: 'include',
             method: 'POST'
         })
