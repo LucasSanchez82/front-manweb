@@ -1,6 +1,7 @@
 // useAuth.ts
 
 import { useState, useEffect } from 'react'; 
+import { apiCheckAuth } from '../api/api';
 
 export const useAuth = () => {
 
@@ -9,14 +10,9 @@ export const useAuth = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch(import.meta.env.VITE_REACT_API_URL + '/utilisateurs/isLogin', {
-          credentials: 'include',
-          method: 'GET'
-        });
+        const { isLogin } = await apiCheckAuth();
         
-        const data = await response.json();
-        
-        if(data.isLogin) {
+        if(isLogin) {
           setIsAuthenticated(true);
         } else {
           setIsAuthenticated(false);  

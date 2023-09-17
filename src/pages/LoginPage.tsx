@@ -1,15 +1,17 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useApiError, useApiMessage } from "../hooks/useApiErrorAndMessage";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
-    const {message, setMessage} = useApiMessage();
-    const {error, setError} = useApiError();
+    const { message, setMessage } = useApiMessage();
+    const { error, setError } = useApiError();
+    const queryClient = useQueryClient();
     const navigate = useNavigate();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         console.log((import.meta.env.VITE_REACT_API_URL));
-        
+
         const form = event.target;
         if (!(form instanceof HTMLFormElement)) throw Error('form n\'est pas de type HTMLFormElement');
         const formData = Object.fromEntries(new FormData(form));
@@ -23,8 +25,8 @@ const LoginPage = () => {
         [k: string]: FormDataEntryValue;
     }) => {
         try {
-            
-            const response = await fetch( import.meta.env.VITE_REACT_API_URL + '/utilisateurs/login', {
+
+            const response = await fetch(import.meta.env.VITE_REACT_API_URL + '/utilisateurs/login', {
                 credentials: "include",
                 method: "POST",
                 headers: {
@@ -35,10 +37,11 @@ const LoginPage = () => {
             if (!response.ok) {
                 const data = await response.json();
                 setError(data.error);
-                
+
             } else if (response.ok) {
                 const json = await response.json();
                 setMessage(json.message);
+                queryClient.invalidateQueries(['utilisateur']);
                 navigate('/');
             }
         } catch (error) {
@@ -58,7 +61,7 @@ const LoginPage = () => {
                 <input type="submit" value="submit" />
                 {error && <span> {error} </span>}
             </form>
-                {message && <span> {message} </span>}
+            {message && <span> {message} </span>}
         </div>
     );
 };

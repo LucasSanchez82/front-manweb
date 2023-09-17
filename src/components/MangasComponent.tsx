@@ -1,5 +1,6 @@
 import React from 'react';
 import '../css/mangas.css';
+import { apiDeleteBox, apiUpdateChapitre } from '../api/api';
 
 export type MangasType = {
     id_box: number,
@@ -15,16 +16,7 @@ const MangasComponent: React.FC<MangasType & { reloadMangasList: () => void, set
         console.log(id_box);
         if (confirm('sur ?')) {
             try {
-                await fetch(import.meta.env.VITE_REACT_API_URL + '/boxs/', {
-                    credentials: 'include',
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        id_box: id_box
-                    })
-                })
+                await apiDeleteBox(id_box);
                 reloadMangasList();
                 setNotification((curr) => [...curr, 'supprimé !'])
             } catch (error) {
@@ -36,17 +28,7 @@ const MangasComponent: React.FC<MangasType & { reloadMangasList: () => void, set
         const input = event.target
         if (input instanceof HTMLInputElement) {
             try {
-                await fetch(import.meta.env.VITE_REACT_API_URL + '/boxs', {
-                    credentials: 'include',
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        id_box: id_box,
-                        new_numero_chapitre: parseInt(input.value),
-                    })
-                })
+                await apiUpdateChapitre(id_box, input);
                 setNotification((curr) => [...curr, 'mis à jour !'])
                 
             }catch(error){
