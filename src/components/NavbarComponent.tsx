@@ -3,7 +3,7 @@ import { apiGetUtilisateur, apiLogout } from "../api/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const NavbarComponent = () => {
-    const { data, error, isLoading } = useQuery(['utilisateur'], apiGetUtilisateur);
+    const { data, isLoading } = useQuery(['utilisateur'], apiGetUtilisateur);
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 

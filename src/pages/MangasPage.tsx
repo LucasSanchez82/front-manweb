@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import MangasComponent, { MangasType } from "../components/MangasComponent";
 import { useApiError } from '../hooks/useApiErrorAndMessage';
-type formDataObjectType = {
+import SearchbarComponent from '../components/SearchbarComponent';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { apiCreateBox, apiGetBoxs } from '../api/api';
+export type formDataObjectType = {
     titre: FormDataEntryValue | null;
     lien: FormDataEntryValue | null;
     lien_image: FormDataEntryValue | null;
@@ -10,42 +13,32 @@ type formDataObjectType = {
 
 const MangasPage = () => {
     const [mangasList, setMangasList] = useState<MangasType[]>([]);
-    const {error, setError} = useApiError();
+    const { error: errorMessage, setError: setErrorMessage } = useApiError();
     const [notification, setNotification] = useState<string[]>([]);
+    const [searchState, setSearchState] = useState('');
+    const queryClient = useQueryClient();
+
+
+    const { isLoading, error, data } = useQuery(['getMangas'], apiGetBoxs)
 
     useEffect(() => {
         loadMangasOfApi(); // Call your function here
-    }, []);
+    }, [data]);
+
     const reloadMangasList = () => {
-        loadMangasOfApi();
+        queryClient.invalidateQueries(['getMangas']);
+        // console.log("gneu");
+        
     };
-    
+
+    const setSearch = (value: string) => {
+        setSearchState(value);
+    }
 
     const loadMangasOfApi = async () => {
-        try {
-            const response = await fetch(import.meta.env.VITE_REACT_API_URL + '/boxs', {
-                credentials: 'include',
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-
-            const dataJson = await response.json();
-            if (!response.ok) {
-                setError(dataJson.error)
-                
-            } else if (response.ok) {
-
-                setMangasList(dataJson);
-                
-            }
-            
-        } catch (error) {
-            console.error(error)
-        }
+        setMangasList(!isLoading && data && data.data);
     }
-    
+
 
 
     const handleSubmit = (event: React.FormEvent) => {
@@ -79,15 +72,23 @@ const MangasPage = () => {
 
         if (!isValidLink) {
             console.error('Invalid link URL');
-            setError('Invalid link URL')
+            setErrorMessage('Invalid link URL')
             return;
-        } else setError('');
+        } else setErrorMessage('');
 
         if (!isValidImageLink) {
             console.error('Invalid image link URL');
-            setError('Invalid image link URL')
+            setErrorMessage('Invalid image link URL')
             return;
-        } else setError('');
+        } else setErrorMessage('');
+
+        let arrForm = Array.from(form)
+        arrForm.pop()
+        arrForm.forEach((el) =>{
+            if(el instanceof HTMLInputElement) {
+                el.value = '';
+            }
+        })        
         createBoxApi(formDataObject)
 
 
@@ -97,29 +98,17 @@ const MangasPage = () => {
 
     const createBoxApi = async (formData: formDataObjectType) => {
         try {
-            const response = await fetch(import.meta.env.VITE_REACT_API_URL + '/boxs/', {
-                credentials: 'include',
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            })
-            const data = await response.json();
+            const { response, data } = await apiCreateBox(formData)
             if (!response.ok) {
-                setError(data.error);
-
-            } else if (response.ok) {
-                reloadMangasList();
+                setErrorMessage(data.error);
 
             }
+            reloadMangasList();
             setNotification((curr) => [...curr, 'ajouté avec succès !']);
         } catch (error) {
             console.error(error);
-            setError('Erreur de communication avec le serveur')
+            setErrorMessage('Erreur de communication avec le serveur')
         }
-
-
     }
 
     return (
@@ -135,6 +124,7 @@ const MangasPage = () => {
                     </div>
                 )
             }
+            <SearchbarComponent setSearchState={setSearch} />
             <form onSubmit={handleSubmit}>
                 <input type="text" placeholder="titre..." name="titre" />
                 <input type="text" placeholder="lien..." name="lien" />
@@ -142,10 +132,11 @@ const MangasPage = () => {
                 <input type="number" placeholder="numero chapitre..." name="numero_chapitre" />
                 <input type="submit" defaultValue="Submit" />
             </form>
-            {error && <p id="error"> {error} </p>}
+            {errorMessage && <p id="error"> {errorMessage} </p>}
             <div id='container'>
                 {
-                    mangasList.map((manga, key) => (
+                    isLoading ? <img src="/loading.gif" alt="loading..." /> : mangasList && !error ? mangasList.map((manga, key) => (
+                        manga.titre.trim().match(searchState) &&
                         <MangasComponent
                             {...manga}
                             key={key}
@@ -153,6 +144,7 @@ const MangasPage = () => {
                             setNotification={setNotification}
                         />
                     ))
+                        : 'Erreur lors du chargement des donnees avec le serveur'
                 }
             </div>
         </>

@@ -1,31 +1,8 @@
-import React from 'react';
+import { formDataObjectType } from "../pages/MangasPage"
 
-const apiDeleteBox = async (id_box: number) => {
-    await fetch(import.meta.env.VITE_REACT_API_URL + '/boxs/', {
-        credentials: 'include',
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            id_box: id_box
-        })
-    })
-}
 
-const apiUpdateChapitre = async (id_box: number, input: HTMLInputElement) => {
-    await fetch(import.meta.env.VITE_REACT_API_URL + '/boxs', {
-        credentials: 'include',
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            id_box: id_box,
-            new_numero_chapitre: parseInt(input.value),
-        })
-    })
-}
+
+
 
 const apiLogout = async () => {
     await fetch(import.meta.env.VITE_REACT_API_URL + '/logout', {
@@ -74,25 +51,58 @@ const apiConfirmEmail = async (idUtilisateur: number, token: string) => {
     return data;
 }
 
-// const apiLogin = async () => {
-//     const response = await fetch( import.meta.env.VITE_REACT_API_URL + '/utilisateurs/login', {
-//         credentials: "include",
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/json"
-//         },
-//         body: JSON.stringify(formData)
-//     })
-//     if (!response.ok) {
-//         const data = await response.json();
-//         setError(data.error);
-        
-//     } else if (response.ok) {
-//         const json = await response.json();
-//         setMessage(json.message);
-//         navigate('/');
-//     }
-// }
+const apiCreateBox = async (formData: formDataObjectType) => {
+        const response = await fetch(import.meta.env.VITE_REACT_API_URL + '/boxs/', {
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        const data = await response.json();
+        return {response, data};
+}
+
+const apiGetBoxs = async () => {
+    const response = await fetch(import.meta.env.VITE_REACT_API_URL + '/boxs', {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+
+    const data = await response.json();
+    return { response, data };
+}
+
+const apiDeleteBox = async (id_box: number) => {
+    await fetch(import.meta.env.VITE_REACT_API_URL + '/boxs/', {
+        credentials: 'include',
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id_box: id_box
+        })
+    })
+}
+
+const apiUpdateChapitre = async (id_box: number, input: HTMLInputElement) => {
+    await fetch(import.meta.env.VITE_REACT_API_URL + '/boxs', {
+        credentials: 'include',
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id_box: id_box,
+            new_numero_chapitre: parseInt(input.value),
+        })
+    })
+}
 
 
 export {
@@ -102,4 +112,6 @@ export {
     apiCheckAuth,
     apiConfirmEmail,
     apiGetUtilisateur,
+    apiCreateBox,
+    apiGetBoxs,
 }

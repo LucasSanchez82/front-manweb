@@ -20,12 +20,17 @@ const SignIn = () => {
 
             if (!response.ok) {
                 const errorMessage = await response.json()
-                setError(errorMessage.error);
+                setError(errorMessage);
+                setResponseMessage('')
+                
                 
                 //  if(!errorMessage)throw new Error(`HTTP error! Status: ${response.status}\nmessage :  ${errorMessage}`);
             }else {
                 const data = await response.json();
-                setResponseMessage(data.message); // Assuming the API returns a message
+                setResponseMessage(data.message);
+                console.log(data);
+                 // Assuming the API returns a message
+                setError('');
             }
 
         } catch (error) {

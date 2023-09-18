@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import { apiGetUtilisateur } from '../api/api';
 import { useQuery } from '@tanstack/react-query';
 

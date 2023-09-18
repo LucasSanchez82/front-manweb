@@ -272,6 +272,10 @@ input {
   border-radius: 5px;
 }
 
+#searchbar {
+  width: 100%;
+}
+
 @keyframes pop-up-animation {
   from {
     opacity: 1;
