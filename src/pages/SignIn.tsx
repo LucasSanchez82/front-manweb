@@ -28,8 +28,6 @@ const SignIn = () => {
             }else {
                 const data = await response.json();
                 setResponseMessage(data.message);
-                console.log(data);
-                 // Assuming the API returns a message
                 setError('');
             }
 

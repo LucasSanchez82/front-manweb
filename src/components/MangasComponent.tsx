@@ -11,9 +11,7 @@ export type MangasType = {
 };
 
 const MangasComponent: React.FC<MangasType & { reloadMangasList: () => void, setNotification: (value: React.SetStateAction<string[]>) => void }> = ({ id_box, titre, lien, lien_image, numero_chapitre, reloadMangasList, setNotification }) => {
-
     const handleDelete = async () => {
-        console.log(id_box);
         if (confirm('sur ?')) {
             try {
                 await apiDeleteBox(id_box);
@@ -30,8 +28,8 @@ const MangasComponent: React.FC<MangasType & { reloadMangasList: () => void, set
             try {
                 await apiUpdateChapitre(id_box, input);
                 setNotification((curr) => [...curr, 'mis à jour !'])
-                
-            }catch(error){
+
+            } catch (error) {
                 console.error(error);
             }
         }

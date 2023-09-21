@@ -1,16 +1,21 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { useApiError, useApiMessage } from "../hooks/useApiErrorAndMessage";
 import { useNavigate } from "react-router-dom";
+import { Query } from "../types";
+import { useEffect } from "react";
 
-const LoginPage = () => {
+const LoginPage: React.FC<Query> = ({ query }) => {
     const { message, setMessage } = useApiMessage();
     const { error, setError } = useApiError();
-    const queryClient = useQueryClient();
+    const { data, isLoading, refetch } = query;
     const navigate = useNavigate();
+    useEffect(() => {
+        if(!isLoading && data.isLogin) {
+            navigate('/mangas')
+        }
+    }, [isLoading])
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log((import.meta.env.VITE_REACT_API_URL));
 
         const form = event.target;
         if (!(form instanceof HTMLFormElement)) throw Error('form n\'est pas de type HTMLFormElement');
@@ -41,8 +46,8 @@ const LoginPage = () => {
             } else if (response.ok) {
                 const json = await response.json();
                 setMessage(json.message);
-                queryClient.invalidateQueries(['utilisateur']);
-                navigate('/');
+                refetch()
+                navigate('/mangas');
             }
         } catch (error) {
             setError('Une erreur s\'est produite lors de la communication avec le serveur.');

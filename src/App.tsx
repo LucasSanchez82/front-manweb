@@ -8,36 +8,37 @@ import LoginPage from './pages/LoginPage'
 import LogoutPage from './pages/LogoutPage'
 import ConfirmEmail from './pages/ConfirmEmail'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import TestPage from './pages/TestPage'
-import { QueryCache } from '@tanstack/react-query'
+// import TestPage from './pages/TestPage'
+import { apiGetUtilisateur } from './api/api'
+import { useQuery } from '@tanstack/react-query'
 
-const queryCache = new QueryCache({
-  onError: (error) => {
-    console.log(error)
-  },
-  onSuccess: (data) => {
-    console.log(data)
-  },
-  onSettled: (data, error) => {
-    console.log(data, error)
-  },
-})
-console.log(queryCache.findAll());
+
+
 
 function App() {
 
+  const { data, isLoading, refetch } = useQuery(['getUtilisateur'], apiGetUtilisateur);
   return (
 
     <BrowserRouter>
-      <NavbarComponent />
+      <NavbarComponent query={{data, isLoading, refetch}} />
       <div id="content">
         <Routes>
-          <Route path='/' element={<MangasPage />} />
+          <Route path='/' element={<LoginPage query={{data, isLoading, refetch}} />} />
+          <Route path='/login' element={<LoginPage query={{data, isLoading, refetch}} />} />
           <Route path='/signin' element={<SignIn />} />
-          <Route path='/login' element={<LoginPage />} />
           <Route path='/logout' element={<LogoutPage />} />
-          <Route path='/test' element={<TestPage />} />
           <Route path='/confirm/:idUtilisateur/:token' element={<ConfirmEmail />} />
+          
+          
+          <Route path='/mangas' element={
+            !isLoading && data.isLogin ?
+            <MangasPage />
+            : <h2 style={{textAlign: 'center'}}> Il faut être <strong>connecté</strong> pour acceder au contenu lié au <strong> compte</strong> 😊 </h2>
+          } />
+
+          {/* <Route path='/test' element={<TestPage />} /> */}
+          <Route path='/:any' element={<h2>404 : page non trouvé</h2>} />
         </Routes>
       </div>
       <ReactQueryDevtools />

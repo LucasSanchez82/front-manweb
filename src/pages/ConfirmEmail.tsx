@@ -12,7 +12,6 @@ const ConfirmEmail: React.FC = () => {
 
     const navigate = useNavigate();
     useEffect(() => {
-        console.log('data : ', data);
 
         confirmEmail()
 

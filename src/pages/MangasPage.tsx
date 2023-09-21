@@ -19,24 +19,23 @@ const MangasPage = () => {
     const queryClient = useQueryClient();
 
 
-    const { isLoading, error, data } = useQuery(['getMangas'], apiGetBoxs)
+    const { isLoading, error, data: boxsDatas, refetch: refetchBoxs } = useQuery(['getMangas'], apiGetBoxs)
 
     useEffect(() => {
         loadMangasOfApi(); // Call your function here
-    }, [data]);
+    }, [boxsDatas]);
 
     const reloadMangasList = () => {
         queryClient.invalidateQueries(['getMangas']);
-        // console.log("gneu");
-        
     };
 
     const setSearch = (value: string) => {
         setSearchState(value);
     }
 
-    const loadMangasOfApi = async () => {
-        setMangasList(!isLoading && data && data.data);
+    const loadMangasOfApi = () => {
+        const arr = (!isLoading && boxsDatas) ? boxsDatas.data : [];
+        setMangasList(arr);
     }
 
 
@@ -84,27 +83,34 @@ const MangasPage = () => {
 
         let arrForm = Array.from(form)
         arrForm.pop()
-        arrForm.forEach((el) =>{
-            if(el instanceof HTMLInputElement) {
+        arrForm.forEach((el) => {
+            if (el instanceof HTMLInputElement) {
                 el.value = '';
             }
-        })        
-        createBoxApi(formDataObject)
-
-
-
-
+        })
+        createBoxApi(formDataObject);
     };
 
     const createBoxApi = async (formData: formDataObjectType) => {
         try {
-            const { response, data } = await apiCreateBox(formData)
-            if (!response.ok) {
-                setErrorMessage(data.error);
+            // const { response, data } = await apiCreateBox(formData)
 
-            }
-            reloadMangasList();
-            setNotification((curr) => [...curr, 'ajouté avec succès !']);
+            apiCreateBox(formData)
+                .then((res) => {
+                    const { response, data } = res;
+                    if (!response.ok) {
+                        setErrorMessage(data.error);
+                    }
+
+                    refetchBoxs().then((res) => {
+                        if (!res.error && res.data?.data) {
+                            loadMangasOfApi();
+                        }
+
+                    });
+                    
+                    setNotification((curr) => [...curr, 'ajouté avec succès !']);
+                })
         } catch (error) {
             console.error(error);
             setErrorMessage('Erreur de communication avec le serveur')
@@ -125,6 +131,19 @@ const MangasPage = () => {
                 )
             }
             <SearchbarComponent setSearchState={setSearch} />
+            <button type="button" onClick={() => {
+                refetchBoxs().then((res) => {
+                    if (!res.error && res.data?.data) {
+                        loadMangasOfApi();
+                    }
+                    setTimeout(() => {
+                        const obj = { id_box: 600, titre: 'string', lien: 'http://test.com', lien_image: 'http://test.com/img.jpg', numero_chapitre: 132456 }
+                        setMangasList((curr) => [obj, ...curr])
+
+                    }, 500);
+
+                });
+            }} >mangas list log</button>
             <form onSubmit={handleSubmit}>
                 <input type="text" placeholder="titre..." name="titre" />
                 <input type="text" placeholder="lien..." name="lien" />
@@ -136,13 +155,14 @@ const MangasPage = () => {
             <div id='container'>
                 {
                     isLoading ? <img src="/loading.gif" alt="loading..." /> : mangasList && !error ? mangasList.map((manga, key) => (
-                        manga.titre.trim().match(searchState) &&
-                        <MangasComponent
-                            {...manga}
-                            key={key}
-                            reloadMangasList={reloadMangasList}
-                            setNotification={setNotification}
-                        />
+                        manga.titre.trim().toLocaleLowerCase().match(searchState.toLocaleLowerCase().trim()) &&
+                            <MangasComponent
+                                {...manga}
+                                key={mangasList.length - key}
+                                reloadMangasList={reloadMangasList}
+                                setNotification={setNotification}
+                            />
+
                     ))
                         : 'Erreur lors du chargement des donnees avec le serveur'
                 }
