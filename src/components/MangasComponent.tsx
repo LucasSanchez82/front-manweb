@@ -35,6 +35,7 @@ const MangasComponent: React.FC<MangasType & { reloadMangasList: () => void, set
         }
 
     }
+    const imageSrc = lien_image || '/loading.gif';
 
     return (
         <div className='itemMangaContainer'>
@@ -43,7 +44,7 @@ const MangasComponent: React.FC<MangasType & { reloadMangasList: () => void, set
             </svg>
             <a href={lien} target="_blank">
                 <h3> {titre || 'no title'} </h3>
-                <div className="mangaImage" style={{ backgroundImage: `url("${lien_image}")` }} ></div>
+                <div className="mangaImage" style={{ backgroundImage: `url("${imageSrc}")` }} ></div>
             </a>
 
             <input

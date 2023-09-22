@@ -131,19 +131,6 @@ const MangasPage = () => {
                 )
             }
             <SearchbarComponent setSearchState={setSearch} />
-            <button type="button" onClick={() => {
-                refetchBoxs().then((res) => {
-                    if (!res.error && res.data?.data) {
-                        loadMangasOfApi();
-                    }
-                    setTimeout(() => {
-                        const obj = { id_box: 600, titre: 'string', lien: 'http://test.com', lien_image: 'http://test.com/img.jpg', numero_chapitre: 132456 }
-                        setMangasList((curr) => [obj, ...curr])
-
-                    }, 500);
-
-                });
-            }} >mangas list log</button>
             <form onSubmit={handleSubmit}>
                 <input type="text" placeholder="titre..." name="titre" />
                 <input type="text" placeholder="lien..." name="lien" />
