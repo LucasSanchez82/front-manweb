@@ -41,7 +41,6 @@ const LoginPage: React.FC<Query> = ({ query }) => {
             })
             if (!response.ok) {
                 const data = await response.json();
-                setMessage('<h1> sallut </h1>');
                 setError(data.error);
 
             } else if (response.ok) {

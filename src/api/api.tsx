@@ -91,7 +91,7 @@ const apiDeleteBox = async (id_box: number) => {
 }
 
 const apiUpdateChapitre = async (id_box: number, input: HTMLInputElement) => {
-    await fetch(import.meta.env.VITE_REACT_API_URL + '/boxs', {
+    await fetch(import.meta.env.VITE_REACT_API_URL + '/boxs/chap', {
         credentials: 'include',
         method: 'PUT',
         headers: {
